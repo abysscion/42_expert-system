@@ -3,10 +3,17 @@ public class ExpertSystem {
     public static void main(String[] args) {
         try {
             if (args.length == 0)
-                enterInteractiveMode();
+                printUsage();
             else {
-                Parser.ParseArguments(args);
-                Parser.ParseFile(args[args.length - 1]);
+                var filePath = args[args.length - 1];
+                var engine = new InferenceEngine();
+
+                Parser.parseArguments(args);
+                Parser.parseFile(filePath);
+                if (Parser.iFlag)
+                    engine.enterInteractiveMode();
+                else
+                    engine.evaluateFile(filePath);
             }
         }
         catch (Exception e) {
@@ -17,10 +24,6 @@ public class ExpertSystem {
                 System.out.println("[Error] " + e.toString());
             e.printStackTrace(); //TODO: remove
         }
-    }
-
-    private static void enterInteractiveMode() {
-
     }
 
     private static void printUsage() {
