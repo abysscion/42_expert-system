@@ -1,0 +1,11 @@
+*.class
+*.log
+*.ctxt
+.idea/*
+.mtj.tmp/
+*.war
+*.nar
+*.ear
+*.tar.gz
+*.rar
+hs_err_pid*
