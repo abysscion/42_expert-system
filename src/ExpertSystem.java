@@ -1,16 +1,15 @@
 public class ExpertSystem {
-
     public static void main(String[] args) {
         try {
             if (args.length == 0)
                 printUsage();
             else {
                 var filePath = args[args.length - 1];
-                var engine = new InferenceEngine();
+                var parser = new Parser();
+                var engine = new InferenceEngine(parser.GetVFlag());
 
-                Parser.parseArguments(args);
-                Parser.parseFile(filePath);
-                if (Parser.iFlag)
+                parser.parseArguments(args);
+                if (parser.GetIFlag())
                     engine.enterInteractiveMode();
                 else
                     engine.evaluateFile(filePath);
@@ -30,6 +29,6 @@ public class ExpertSystem {
         System.out.println("Usage: expert-system [options] <path/to/input_file.txt>");
         System.out.println("options:\n" +
                 "\t-i\t - enter interactive mode.\n" +
-                "\t-e\t - print some explanations as solving is going on.");
+                "\t-v\t - print some explanations as solving is going on.");
     }
 }

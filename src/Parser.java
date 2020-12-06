@@ -1,29 +1,72 @@
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.regex.Pattern;
 
 public class Parser {
-    public static boolean eFlag;
-    public static boolean iFlag;
-    public static String allowedSymbolsReg = "[^()!+|^=?<>A-Z\\s ]+";
+    private boolean IFlag;
+    private boolean VFlag;
 
-    public static void parseArguments(String[] args) throws Exception {
+    public boolean GetIFlag() { return IFlag; }
+
+    public boolean GetVFlag() { return VFlag; }
+
+    public static String getRulePartFromLine(String line) {
+        if (line == null)
+            throw new NullPointerException();
+        if (line.length() == 0)
+            return "";
+        var tmpLine = line.replaceAll("^[ \t]+|[ \t]+$", "");
+        if (tmpLine.charAt(0) == '?' || tmpLine.charAt(0) == '=')
+            return "";
+        return tmpLine.substring(0, tmpLine.contains("#") ? tmpLine.indexOf('#') : tmpLine.length());
+    }
+
+    public static boolean isRuleValid(String line) {
+        if (line == null)
+            throw new NullPointerException();
+        if (line.length() == 0)
+            return false;
+        if (!line.contains("=>"))
+            return false;
+
+        var tokens = line.split("\\s+");
+        var operatorsCount = 0;
+        var operandsCount = 0;
+        for (var token : tokens) {
+            if (Pattern.matches("^(([+|^])|(=>)|(<=>))$", token)) //skipping ! operator
+                operatorsCount++;
+            else
+                operandsCount++;
+        }
+        return operatorsCount == operandsCount - 1;
+    }
+
+    public static boolean isLineValid(String line) {
+        if (line == null)
+            throw new NullPointerException();
+        if (line.length() == 0)
+            return true;
+
+        var matcher = Pattern.compile("[^()!+|^=?<>A-Z\\s ]+").matcher(line);
+        if (matcher.find())
+            return line.charAt(matcher.start()) == '#';
+        return true;
+    }
+
+    public void parseArguments(String[] args) throws Exception {
         for (int i = 0, argsLength = args.length; i < argsLength; i++) {
             var argument = args[i];
             switch (argument) {
+                case "-v":
+                    if (!VFlag)
+                        VFlag = true;
+                    else
+                        throw new Exception("-v flag is already set!");
+                    break;
                 case "-i":
-                    if (!iFlag)
-                        iFlag = true;
+                    if (!IFlag)
+                        IFlag = true;
                     else
                         throw new Exception("-i flag is already set!");
-                    break;
-                case "-e":
-                    if (!eFlag)
-                        eFlag = true;
-                    else
-                        throw new Exception("-e flag is already set!");
                     break;
                 default:
                     if (i != argsLength - 1)
@@ -35,34 +78,5 @@ public class Parser {
                     break;
             }
         }
-    }
-
-    public static void parseFile(String fileName) throws Exception {
-        try {
-            if (!new File(fileName).exists())
-                throw new Exception("file [" + fileName + "] not found!");
-            var reader = new BufferedReader(new FileReader(fileName));
-            var line = "";
-
-            while ((line = reader.readLine()) != null) {
-                if (!isLineValid(line))
-                    throw new Exception("invalid line: \"" + line + "\"");
-            }
-        }
-        catch (IOException e) {
-            throw new Exception("unable to read file: " + fileName);
-        }
-    }
-
-    private static boolean isLineValid(String line) {
-        if (line == null)
-            throw new NullPointerException();
-        if (line.length() < 1)
-            return true;
-
-        var matcher = Pattern.compile(allowedSymbolsReg).matcher(line);
-        if (matcher.find())
-            return line.substring(matcher.start()).charAt(0) == '#';
-        return true;
     }
 }
