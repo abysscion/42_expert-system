@@ -1,3 +1,5 @@
+package Core;
+
 public class ExpertSystem {
     public static void main(String[] args) {
         try {

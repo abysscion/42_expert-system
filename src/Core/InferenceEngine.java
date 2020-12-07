@@ -1,19 +1,28 @@
+package Core;
+
+import AST.*;
+import AST.NonTerminals.Not;
+import AST.Terminals.Fact;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.*;
+import java.util.regex.Pattern;
 
 public class InferenceEngine {
+    private final Hashtable<String, Fact> knownFacts;
+    private final HashSet<ASTNode> ruleTrees;
+    private final HashSet<String> queries;
     private final boolean verboseFlag;
-    private final HashSet<FactConnectorNode> knownConnectors;
-    private final HashSet<FactNode> knownFacts;
 
     public InferenceEngine(boolean verboseFlag)
     {
         this.verboseFlag = verboseFlag;
-        knownFacts = new HashSet<>();
-        knownConnectors = new HashSet<>();
+        ruleTrees = new HashSet<>();
+        queries = new HashSet<>();
+        knownFacts = new Hashtable<>();
     }
 
     public void enterInteractiveMode() {
@@ -38,11 +47,19 @@ public class InferenceEngine {
             while ((line = reader.readLine()) != null) {
                 if (!Parser.isLineValid(line))
                     throw new Exception("invalid line: \"" + line + "\"");
-                line = Parser.getRulePartFromLine(line);
-                if (line.length() == 0)
-                    continue;
-                if (Parser.isRuleValid(line))
-                    parseTokensFromRule(line);
+                line = line.substring(0, line.contains("#") ? line.indexOf('#') : line.length());
+                line = line.strip();
+                if (line.startsWith("="))
+                    parseKnownFacts(line);
+                else if (line.startsWith("?"))
+                    parseQueries(line);
+                else {
+                    line = Parser.getRulePartFromLine(line);
+                    if (line.length() == 0)
+                        continue;
+                    if (Parser.isRuleValid(line))
+                        ruleTrees.add(buildTreeFromRule(line));
+                }
             }
         }
         catch (IOException e) {
@@ -50,10 +67,68 @@ public class InferenceEngine {
         }
     }
 
-    private void parseTokensFromRule(String rule) {
-        var tokens = rule.split("\\s+");
-        for (var token:tokens) {
-
+    private void parseQueries(String line) {
+        if (line == null)
+            throw new NullPointerException();
+        if (line.length() > 1 && line.startsWith("?")) {
+            if (Pattern.matches("[^A-Za-z]", line))
+                return;
+            var arr = line.toCharArray();
+            for (var i = 1; i < line.length(); i++)
+                queries.add(arr[i] + "");
         }
+    }
+
+    private void parseKnownFacts(String line) {
+        if (line == null)
+            throw new NullPointerException();
+        if (line.length() > 1 && line.startsWith("=")) {
+            if (Pattern.matches("[^A-Za-z]", line))
+                return;
+            var arr = line.toCharArray();
+            for (var i = 1; i < line.length(); i++) {
+                var name = arr[i] + "";
+                if (knownFacts.containsKey(name))
+                    knownFacts.get(name).setValue(true);
+                else
+                    knownFacts.put(name, new Fact(name, true));
+            }
+        }
+    }
+
+    private ASTNode buildTreeFromRule(String rule) {
+        var pat = Pattern.compile("(\\(\\S)|(\\S\\))|(!\\S)");
+        var matcher = pat.matcher(rule);
+        var deq = new LinkedList<String>();
+
+        while (matcher.find()) {
+            rule = new StringBuilder(rule).insert(matcher.start() + 1, ' ').toString();
+            matcher = pat.matcher(rule);
+        }
+        Collections.addAll(deq, rule.split("\\s+"));
+
+        var rpnTokensList = InfixToPostfixParser.shuntingYard(deq);
+        var stack = new Stack<ASTNode>();
+
+        for (var token : rpnTokensList) {
+            if (ASTParser.isOperator(token)) {
+                var node = (NonTerminal) ASTNodeFabric.CreateNode(token);
+
+                if (token.equals(ASTNode.NOT))
+                    ((Not)node).setChild(stack.pop());
+                else {
+                    var rOperand = stack.pop();
+                    var lOperand = stack.pop();
+
+                    node.setLeft(lOperand);
+                    node.setRight(rOperand);
+                }
+                stack.push(node);
+            }
+            else
+                stack.push(ASTNodeFabric.CreateNode(token));
+        }
+
+        return stack.pop();
     }
 }

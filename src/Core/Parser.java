@@ -1,3 +1,5 @@
+package Core;
+
 import java.io.File;
 import java.util.regex.Pattern;
 
@@ -17,7 +19,7 @@ public class Parser {
         var tmpLine = line.replaceAll("^[ \t]+|[ \t]+$", "");
         if (tmpLine.charAt(0) == '?' || tmpLine.charAt(0) == '=')
             return "";
-        return tmpLine.substring(0, tmpLine.contains("#") ? tmpLine.indexOf('#') : tmpLine.length());
+        return tmpLine;
     }
 
     public static boolean isRuleValid(String line) {
