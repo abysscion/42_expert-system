@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 
 public class InferenceEngine {
     private final Hashtable<String, Fact> knownFacts;
+    private final ArrayList<Fact> atoms;
     private final HashSet<ASTNode> ruleTrees;
     private final HashSet<String> queries;
     private final boolean verboseFlag;
@@ -23,6 +24,7 @@ public class InferenceEngine {
         ruleTrees = new HashSet<>();
         queries = new HashSet<>();
         knownFacts = new Hashtable<>();
+        atoms = new ArrayList<>();
     }
 
     public void enterInteractiveMode() {
@@ -31,6 +33,9 @@ public class InferenceEngine {
 
     public void evaluateFile(String filePath) throws Exception {
         parseFile(filePath);
+        for (var atom:atoms) {
+            System.out.println(Long.toBinaryString(getAtomicDigit(atom)));
+        }
     }
 
     private void evaluateLine() {
@@ -61,6 +66,7 @@ public class InferenceEngine {
                         ruleTrees.add(buildTreeFromRule(line));
                 }
             }
+            atoms.addAll(knownFacts.values());
         }
         catch (IOException e) {
             throw new Exception("unable to read file: " + fileName);
@@ -83,17 +89,31 @@ public class InferenceEngine {
         if (line == null)
             throw new NullPointerException();
         if (line.length() > 1 && line.startsWith("=")) {
-            if (Pattern.matches("[^A-Za-z]", line))
+            if (!Pattern.matches("^[A-Z]$", line)) //TODO: throw exception for invalid known fact?
                 return;
             var arr = line.toCharArray();
             for (var i = 1; i < line.length(); i++) {
                 var name = arr[i] + "";
-                if (knownFacts.containsKey(name))
-                    knownFacts.get(name).setValue(true);
-                else
-                    knownFacts.put(name, new Fact(name, true));
+                knownFacts.put(name, new Fact(name, true));
             }
         }
+    }
+
+    private long getAtomicDigit(Fact atomicFact) throws Exception {
+        if (atoms.size() == 0)
+            throw new Exception("tried to get atomic digit from empty atoms list");
+
+        var place = atoms.indexOf(atomicFact);
+        var piece = ((long)Math.pow(2, atoms.size() - place)) - 1;
+        long shift = piece;
+        long state = piece << shift;
+
+        for (var i = 1; i < place; i++) {
+            shift *= 2;
+            state |= state << shift;
+        }
+
+        return state;
     }
 
     private ASTNode buildTreeFromRule(String rule) {
@@ -106,6 +126,12 @@ public class InferenceEngine {
             matcher = pat.matcher(rule);
         }
         Collections.addAll(deq, rule.split("\\s+"));
+
+        for (var fact:deq) { //TODO: throw exception for invalid known fact?
+            if (fact.matches("^[A-Z]$") && !knownFacts.containsKey(fact)) {
+                knownFacts.put(fact, new Fact(fact, false));
+            }
+        }
 
         var rpnTokensList = InfixToPostfixParser.shuntingYard(deq);
         var stack = new Stack<ASTNode>();
