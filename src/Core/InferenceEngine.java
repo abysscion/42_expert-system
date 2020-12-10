@@ -8,6 +8,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -33,8 +35,12 @@ public class InferenceEngine {
 
     public void evaluateFile(String filePath) throws Exception {
         parseFile(filePath);
+
         for (var atom:atoms) {
-            System.out.println(Long.toBinaryString(getAtomicDigit(atom)));
+            System.out.print(atom.toString() + ": ");
+            for (var bit:getAtomicDigitAsBooleans(atom))
+                System.out.print(bit ? '1' : '0');
+            System.out.println();
         }
     }
 
@@ -99,22 +105,51 @@ public class InferenceEngine {
         }
     }
 
-    private long getAtomicDigit(Fact atomicFact) throws Exception {
+    private boolean[] getAtomicDigitAsBooleans(Fact atomicFact) throws Exception {
         if (atoms.size() == 0)
             throw new Exception("tried to get atomic digit from empty atoms list");
 
+        var N = atoms.size();
         var place = atoms.indexOf(atomicFact);
-        var piece = ((long)Math.pow(2, atoms.size() - place)) - 1;
-        long shift = piece;
-        long state = piece << shift;
+        var zeroAndOneCount = (int)Math.pow(2, N - place - 1);
+        var seriesRepeating = (int)Math.pow(2, place);
 
-        for (var i = 1; i < place; i++) {
-            shift *= 2;
-            state |= state << shift;
+        boolean[] result = new boolean[seriesRepeating * zeroAndOneCount * 2];
+
+        for (var i = 0; i < seriesRepeating; i++) {
+            for (var j = 0; j < zeroAndOneCount; j++)
+                result[j + (zeroAndOneCount * i * 2)] = true;
         }
 
-        return state;
+        return result;
     }
+
+    //TODO: idk how to make it work
+//    private BigDecimal getAtomicDigitAsBigInt(Fact atomicFact) throws Exception {
+//        if (atoms.size() == 0)
+//            throw new Exception("tried to get atomic digit from empty atoms list");
+//
+//        var N = atoms.size();
+//        var place = atoms.indexOf(atomicFact);
+//        var zeroAndOneCount = (int)Math.pow(2, N - place - 1);
+//        var seriesRepeating = (int)Math.pow(2, place);
+//
+//        boolean[] tmp = new boolean[seriesRepeating * zeroAndOneCount * 2];
+//
+//        for (var i = 0; i < seriesRepeating; i++) {
+//            for (var j = 0; j < zeroAndOneCount; j++)
+//                tmp[j + zeroAndOneCount * ((2 * i) + 1)] = true;
+//        }
+//
+//        long val = 0;
+//        for (var bit: tmp) {
+//            val <<= 1;
+//            if (bit)
+//                val++;
+//        }
+//
+//        return BigDecimal.valueOf(val);
+//    }
 
     private ASTNode buildTreeFromRule(String rule) {
         var pat = Pattern.compile("(\\(\\S)|(\\S\\))|(!\\S)");
