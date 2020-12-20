@@ -1,9 +1,9 @@
 package AST.NonTerminals;
 
 import AST.ASTNode;
-import AST.NonTerminal;
+import AST.Node;
 
-public class Not extends NonTerminal {
+public class Not extends Node {
     public Not(String value) {
         super(value);
     }
@@ -14,10 +14,6 @@ public class Not extends NonTerminal {
 
     public void setRight(ASTNode right) {
         throw new UnsupportedOperationException();
-    }
-
-    public boolean interpret() {
-        return !left.interpret();
     }
 
     public String toString() {

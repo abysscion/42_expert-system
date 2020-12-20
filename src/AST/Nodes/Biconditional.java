@@ -1,18 +1,11 @@
 package AST.NonTerminals;
 
 import AST.ASTNode;
-import AST.NonTerminal;
+import AST.Node;
 
-public class Biconditional extends NonTerminal {
+public class Biconditional extends Node {
     public Biconditional(String value) {
         super(value);
-    }
-
-    public boolean interpret() {
-        var l = left.interpret();
-        var r = right.interpret();
-
-        return ((l && r) || (!l && !r));
     }
 
     public String toString() {

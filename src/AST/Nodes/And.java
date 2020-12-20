@@ -8,10 +8,6 @@ public class And extends NonTerminal {
         super(value);
     }
 
-    public boolean interpret() {
-        return left.interpret() && right.interpret();
-    }
-
     public String toString() {
         return String.format("(%s %s %s)", left, ASTNode.AND, right);
     }

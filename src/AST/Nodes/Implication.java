@@ -1,15 +1,11 @@
 package AST.NonTerminals;
 
 import AST.ASTNode;
-import AST.NonTerminal;
+import AST.Node;
 
-public class Implication extends NonTerminal {
+public class Implication extends Node  {
     public Implication(String value) {
         super(value);
-    }
-
-    public boolean interpret() {
-        return !left.interpret() || right.interpret();
     }
 
     public String toString() {

@@ -1,15 +1,11 @@
 package AST.NonTerminals;
 
 import AST.ASTNode;
-import AST.NonTerminal;
+import AST.Node;
 
-public class Or extends NonTerminal {
+public class Or extends Node {
     public Or(String value) {
         super(value);
-    }
-
-    public boolean interpret() {
-        return left.interpret() || right.interpret();
     }
 
     public String toString() {

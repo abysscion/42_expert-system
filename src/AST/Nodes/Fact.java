@@ -8,12 +8,6 @@ public class Fact extends Terminal {
         super(name, value);
     }
 
-    public boolean interpret() {
-        //TODO: do something with facts?
-        String a = null;
-        return a.length() == 1;
-    }
-
     @Override
     public ASTNode getLeft() {
         return null;
