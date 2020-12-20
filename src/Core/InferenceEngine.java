@@ -110,7 +110,7 @@ public class InferenceEngine {
             var arr = line.toCharArray();
             for (var i = 1; i < line.length(); i++) {
                 var name = arr[i] + "";
-                knownFacts.put(name, new Fact(name, true));
+                knownFacts.put(name, new Fact(name, name));
             }
         }
     }
@@ -174,7 +174,7 @@ public class InferenceEngine {
 
         for (var fact:deq) { //TODO: throw exception for invalid known fact?
             if (fact.matches("^[A-Z]$") && !knownFacts.containsKey(fact)) {
-                knownFacts.put(fact, new Fact(fact, false));
+                knownFacts.put(fact, new Fact(fact, fact));
             }
         }
 

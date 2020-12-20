@@ -2,7 +2,7 @@ package AST;
 
 public abstract class Terminal implements ASTNode {
     protected String name;
-    protected boolean value;
+    protected String value;
 
 
     public ASTNode getLeft(ASTNode astNode){
@@ -14,15 +14,15 @@ public abstract class Terminal implements ASTNode {
     }
 
 
-    public Terminal(String name) {
-        this(name, false);
-    }
-
-    public Terminal(String name, boolean value) {
+    public Terminal(String name, String value) {
         this.value = value;
         this.name = name;
     }
 
+    @Override
+    public String getValue() {
+        return value;
+    }
 
     public String toString() {
         return String.format("%s", name);

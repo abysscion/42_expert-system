@@ -4,6 +4,10 @@ import AST.ASTNode;
 import AST.NonTerminal;
 
 public class Xor extends NonTerminal {
+    public Xor(String value) {
+        super(value);
+    }
+
     public boolean interpret() {
         return left.interpret() != right.interpret();
     }

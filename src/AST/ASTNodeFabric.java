@@ -9,20 +9,20 @@ public abstract class ASTNodeFabric {
     public static ASTNode CreateNode(String token) {
         switch (token) {
             case ASTNode.NOT:
-                return new Not();
+                return new Not(token);
             case ASTNode.AND:
-                return new And();
+                return new And(token);
             case ASTNode.OR:
-                return new Or();
+                return new Or(token);
             case ASTNode.XOR:
-                return new Xor();
+                return new Xor(token);
             case ASTNode.IMP:
-                return new Implication();
+                return new Implication(token);
             case ASTNode.BI:
-                return new Biconditional();
+                return new Biconditional(token);
 
             default:
-                return new Fact(token);
+                return new Fact(token, token);
         }
     }
 }

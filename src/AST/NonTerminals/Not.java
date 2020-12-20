@@ -4,6 +4,10 @@ import AST.ASTNode;
 import AST.NonTerminal;
 
 public class Not extends NonTerminal {
+    public Not(String value) {
+        super(value);
+    }
+
     public void setChild(ASTNode child) {
         setLeft(child);
     }

@@ -2,6 +2,11 @@ package AST;
 
 public abstract class NonTerminal implements ASTNode {
     protected ASTNode left, right;
+    protected String value;
+
+    public NonTerminal(String value) {
+        this.value = value;
+    }
 
     public void setLeft(ASTNode left) {
         this.left = left;
@@ -12,6 +17,10 @@ public abstract class NonTerminal implements ASTNode {
     }
 
     @Override
+    public String getValue() {
+        return value;
+    }
+    @Override
     public ASTNode getLeft(){
         return left;
     }
@@ -19,5 +28,4 @@ public abstract class NonTerminal implements ASTNode {
     public ASTNode getRight() {
         return right;
     }
-
 }

@@ -4,10 +4,7 @@ import AST.ASTNode;
 import AST.Terminal;
 
 public class Fact extends Terminal {
-    public Fact(String name) {
-        super(name);
-    }
-    public Fact(String name, boolean value) {
+    public Fact(String name, String value) {
         super(name, value);
     }
 
@@ -27,7 +24,7 @@ public class Fact extends Terminal {
         return null;
     }
 
-    public void setValue(boolean value) {
+    public void setValue(String value) {
         this.value = value;
     }
 }

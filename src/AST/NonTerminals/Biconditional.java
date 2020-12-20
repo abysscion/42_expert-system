@@ -4,6 +4,10 @@ import AST.ASTNode;
 import AST.NonTerminal;
 
 public class Biconditional extends NonTerminal {
+    public Biconditional(String value) {
+        super(value);
+    }
+
     public boolean interpret() {
         var l = left.interpret();
         var r = right.interpret();
