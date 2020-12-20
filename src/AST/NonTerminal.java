@@ -10,4 +10,14 @@ public abstract class NonTerminal implements ASTNode {
     public void setRight(ASTNode right) {
         this.right = right;
     }
+
+    @Override
+    public ASTNode getLeft(){
+        return left;
+    }
+    @Override
+    public ASTNode getRight() {
+        return right;
+    }
+
 }

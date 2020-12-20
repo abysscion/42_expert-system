@@ -11,21 +11,24 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
 public class InferenceEngine {
-    private final Hashtable<String, Fact> knownFacts;
+    private final HashMap<String, Fact> knownFacts;
+    private final HashMap<String, boolean[]> atomicFacts;
     private final ArrayList<Fact> atoms;
-    private final HashSet<ASTNode> ruleTrees;
+    private final ArrayList<ASTNode> ruleTrees;
     private final HashSet<String> queries;
     private final boolean verboseFlag;
 
     public InferenceEngine(boolean verboseFlag)
     {
+        atomicFacts = new HashMap<>();
         this.verboseFlag = verboseFlag;
-        ruleTrees = new HashSet<>();
+        ruleTrees = new ArrayList<>();
         queries = new HashSet<>();
-        knownFacts = new Hashtable<>();
+        knownFacts = new HashMap<>();
         atoms = new ArrayList<>();
     }
 
@@ -34,13 +37,18 @@ public class InferenceEngine {
     }
 
     public void evaluateFile(String filePath) throws Exception {
+        GlobalGraph globalGraph = new GlobalGraph();//temp
         parseFile(filePath);
-
         for (var atom:atoms) {
             System.out.print(atom.toString() + ": ");
             for (var bit:getAtomicDigitAsBooleans(atom))
                 System.out.print(bit ? '1' : '0');
             System.out.println();
+        }
+        int i = 0;
+        for (Map.Entry<String, boolean[]> f : atomicFacts.entrySet()){
+            globalGraph.execute(ruleTrees.get(i), f.getKey(), f.getValue()); //send to recursion
+            i++;
         }
     }
 
@@ -68,8 +76,10 @@ public class InferenceEngine {
                     line = Parser.getRulePartFromLine(line);
                     if (line.length() == 0)
                         continue;
-                    if (Parser.isRuleValid(line))
-                        ruleTrees.add(buildTreeFromRule(line));
+                    if (Parser.isRuleValid(line)) {
+                        ASTNode temp = buildTreeFromRule(line);
+                        ruleTrees.add(temp);
+                    }
                 }
             }
             atoms.addAll(knownFacts.values());
@@ -120,7 +130,7 @@ public class InferenceEngine {
             for (var j = 0; j < zeroAndOneCount; j++)
                 result[j + (zeroAndOneCount * i * 2)] = true;
         }
-
+        atomicFacts.put(atomicFact.toString(), result);
         return result;
     }
 

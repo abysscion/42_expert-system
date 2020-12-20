@@ -9,4 +9,6 @@ public interface ASTNode {
     String BI = "<=>";
 
     boolean interpret();
+    ASTNode getLeft();
+    ASTNode getRight();
 }
