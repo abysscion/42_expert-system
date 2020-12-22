@@ -1,11 +1,11 @@
-package AST.Terminals;
+package AST.Nodes;
 
 import AST.ASTNode;
-import AST.Terminal;
+import AST.Node;
 
-public class Fact extends Terminal {
-    public Fact(String name, String value) {
-        super(name, value);
+public class Fact extends Node {
+    public Fact(String value) {
+        super(value);
     }
 
     @Override
@@ -20,5 +20,9 @@ public class Fact extends Terminal {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String toString() {
+        return String.format("%s", value);
     }
 }

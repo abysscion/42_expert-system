@@ -1,7 +1,6 @@
 package AST;
 
-import AST.NonTerminals.*;
-import AST.Terminals.Fact;
+import AST.Nodes.*;
 
 public abstract class ASTNodeFabric {
     private ASTNodeFabric(){}
@@ -22,7 +21,7 @@ public abstract class ASTNodeFabric {
                 return new Biconditional(token);
 
             default:
-                return new Fact(token, token);
+                return new Fact(token);
         }
     }
 }

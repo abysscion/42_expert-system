@@ -1,9 +1,9 @@
-package AST.NonTerminals;
+package AST.Nodes;
 
 import AST.ASTNode;
-import AST.NonTerminal;
+import AST.Node;
 
-public class And extends NonTerminal {
+public class And extends Node {
     public And(String value) {
         super(value);
     }

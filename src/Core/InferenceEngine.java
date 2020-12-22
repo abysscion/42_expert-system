@@ -1,17 +1,14 @@
 package Core;
 
 import AST.*;
-import AST.NonTerminals.Not;
-import AST.Terminals.Fact;
+import AST.Nodes.Not;
+import AST.Nodes.Fact;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
 public class InferenceEngine {
@@ -110,7 +107,7 @@ public class InferenceEngine {
             var arr = line.toCharArray();
             for (var i = 1; i < line.length(); i++) {
                 var name = arr[i] + "";
-                knownFacts.put(name, new Fact(name, name));
+                knownFacts.put(name, new Fact(name));
             }
         }
     }
@@ -132,6 +129,50 @@ public class InferenceEngine {
         }
         atomicFacts.put(atomicFact.toString(), result);
         return result;
+    }
+
+    private ASTNode buildTreeFromRule(String rule) {
+        var pat = Pattern.compile("(\\(\\S)|(\\S\\))|(!\\S)");
+        var matcher = pat.matcher(rule);
+        var deq = new LinkedList<String>();
+
+        while (matcher.find()) {
+            rule = new StringBuilder(rule).insert(matcher.start() + 1, ' ').toString();
+            matcher = pat.matcher(rule);
+        }
+        Collections.addAll(deq, rule.split("\\s+"));
+
+        for (var fact:deq) { //TODO: throw exception for invalid known fact?
+            if (fact.matches("^[A-Z]$") && !knownFacts.containsKey(fact)) {
+                knownFacts.put(fact, new Fact(fact));
+            }
+        }
+
+        var rpnTokensList = InfixToPostfixParser.shuntingYard(deq);
+        var stack = new Stack<ASTNode>();
+
+        for (var token : rpnTokensList) {
+            if (ASTParser.isOperator(token)) {
+                ASTNode node = ASTNodeFabric.CreateNode(token);
+
+                if (token.equals(ASTNode.NOT))
+                    ((Not)node).setChild(stack.pop());
+                else {
+                    var rOperand = stack.pop();
+                    var lOperand = stack.pop();
+
+                    node.setLeft(lOperand);
+                    node.setRight(rOperand);
+                }
+                stack.push(node);
+            }
+            else {
+
+                stack.push(ASTNodeFabric.CreateNode(token));
+            }
+        }
+
+        return stack.pop();
     }
 
     //TODO: idk how to make it work
@@ -160,46 +201,4 @@ public class InferenceEngine {
 //
 //        return BigDecimal.valueOf(val);
 //    }
-
-    private ASTNode buildTreeFromRule(String rule) {
-        var pat = Pattern.compile("(\\(\\S)|(\\S\\))|(!\\S)");
-        var matcher = pat.matcher(rule);
-        var deq = new LinkedList<String>();
-
-        while (matcher.find()) {
-            rule = new StringBuilder(rule).insert(matcher.start() + 1, ' ').toString();
-            matcher = pat.matcher(rule);
-        }
-        Collections.addAll(deq, rule.split("\\s+"));
-
-        for (var fact:deq) { //TODO: throw exception for invalid known fact?
-            if (fact.matches("^[A-Z]$") && !knownFacts.containsKey(fact)) {
-                knownFacts.put(fact, new Fact(fact, fact));
-            }
-        }
-
-        var rpnTokensList = InfixToPostfixParser.shuntingYard(deq);
-        var stack = new Stack<ASTNode>();
-
-        for (var token : rpnTokensList) {
-            if (ASTParser.isOperator(token)) {
-                var node = (NonTerminal) ASTNodeFabric.CreateNode(token);
-
-                if (token.equals(ASTNode.NOT))
-                    ((Not)node).setChild(stack.pop());
-                else {
-                    var rOperand = stack.pop();
-                    var lOperand = stack.pop();
-
-                    node.setLeft(lOperand);
-                    node.setRight(rOperand);
-                }
-                stack.push(node);
-            }
-            else
-                stack.push(ASTNodeFabric.CreateNode(token));
-        }
-
-        return stack.pop();
-    }
 }

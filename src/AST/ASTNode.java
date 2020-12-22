@@ -8,8 +8,9 @@ public interface ASTNode {
     String IMP = "=>";
     String BI = "<=>";
 
-    boolean interpret();
     String getValue();
     ASTNode getLeft();
     ASTNode getRight();
+    void setLeft(ASTNode leftNode);
+    void setRight(ASTNode rightNode);
 }

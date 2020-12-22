@@ -2,16 +2,16 @@ package Core;
 
 public class ExpertSystem {
     public static void main(String[] args) throws Exception {
-        var filePath = "C:\\Users\\Mi\\Desktop\\42_expert-system\\example_input.txt";
-        var parser = new Parser();
-        var engine = new InferenceEngine(parser.GetVFlag());
-
-      //  parser.parseArguments(args);
-        if (parser.GetIFlag())
-            engine.enterInteractiveMode();
-        else
-            engine.evaluateFile(filePath);
-        /*try {
+//        var filePath = "C:\\Users\\Mi\\Desktop\\42_expert-system\\example_input.txt";
+//        var parser = new Parser();
+//        var engine = new InferenceEngine(parser.GetVFlag());
+//
+//      //  parser.parseArguments(args);
+//        if (parser.GetIFlag())
+//            engine.enterInteractiveMode();
+//        else
+//            engine.evaluateFile(filePath);
+        try {
             if (args.length == 0)
                 printUsage();
             else {
@@ -33,7 +33,7 @@ public class ExpertSystem {
             else
                 System.out.println("[Error] " + e.toString());
             e.printStackTrace(); //TODO: remove
-        }*/
+        }
     }
 
     private static void printUsage() {

@@ -1,4 +1,4 @@
-package AST.NonTerminals;
+package AST.Nodes;
 
 import AST.ASTNode;
 import AST.Node;
