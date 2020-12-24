@@ -1,8 +1,11 @@
 package Core;
 
+import java.util.Arrays;
+
 public class BooleanFunction {
     public boolean[] lnot(boolean[] left, boolean[] right){
         boolean[] result = new boolean[left != null ? left.length : right.length];
+
         if (left != null){
             for (int i = 0; i < left.length; i++)
                 result[i] = !left[i];

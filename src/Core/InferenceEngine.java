@@ -17,12 +17,11 @@ public class InferenceEngine {
     private final ArrayList<Fact> atoms;
     private final ArrayList<ASTNode> ruleTrees;
     private final HashSet<String> queries;
-    private final boolean verboseFlag;
+    private int count;
 
     public InferenceEngine(boolean verboseFlag)
     {
         atomicFacts = new HashMap<>();
-        this.verboseFlag = verboseFlag;
         ruleTrees = new ArrayList<>();
         queries = new HashSet<>();
         knownFacts = new HashMap<>();
@@ -34,7 +33,6 @@ public class InferenceEngine {
     }
 
     public void evaluateFile(String filePath) throws Exception {
-        GlobalGraph globalGraph = new GlobalGraph();//temp
         parseFile(filePath);
         for (var atom:atoms) {
             System.out.print(atom.toString() + ": ");
@@ -42,12 +40,8 @@ public class InferenceEngine {
                 System.out.print(bit ? '1' : '0');
             System.out.println();
         }
-        int i = 0;
-        for (Map.Entry<String, boolean[]> f : atomicFacts.entrySet()){
-            globalGraph.execute(ruleTrees.get(i), f.getKey(), f.getValue()); //send to recursion
-            i++;
-        }
     }
+
 
     private void evaluateLine() {
 
@@ -127,6 +121,7 @@ public class InferenceEngine {
             for (var j = 0; j < zeroAndOneCount; j++)
                 result[j + (zeroAndOneCount * i * 2)] = true;
         }
+        count = result.length;
         atomicFacts.put(atomicFact.toString(), result);
         return result;
     }
@@ -175,30 +170,23 @@ public class InferenceEngine {
         return stack.pop();
     }
 
-    //TODO: idk how to make it work
-//    private BigDecimal getAtomicDigitAsBigInt(Fact atomicFact) throws Exception {
-//        if (atoms.size() == 0)
-//            throw new Exception("tried to get atomic digit from empty atoms list");
-//
-//        var N = atoms.size();
-//        var place = atoms.indexOf(atomicFact);
-//        var zeroAndOneCount = (int)Math.pow(2, N - place - 1);
-//        var seriesRepeating = (int)Math.pow(2, place);
-//
-//        boolean[] tmp = new boolean[seriesRepeating * zeroAndOneCount * 2];
-//
-//        for (var i = 0; i < seriesRepeating; i++) {
-//            for (var j = 0; j < zeroAndOneCount; j++)
-//                tmp[j + zeroAndOneCount * ((2 * i) + 1)] = true;
-//        }
-//
-//        long val = 0;
-//        for (var bit: tmp) {
-//            val <<= 1;
-//            if (bit)
-//                val++;
-//        }
-//
-//        return BigDecimal.valueOf(val);
-//    }
+    public HashMap<String, Fact> getKnownFacts() {
+        return knownFacts;
+    }
+
+    public HashMap<String, boolean[]> getAtomicFacts() {
+        return atomicFacts;
+    }
+
+    public ArrayList<Fact> getAtoms() {
+        return atoms;
+    }
+
+    public ArrayList<ASTNode> getRuleTrees() {
+        return ruleTrees;
+    }
+
+    public int getCount() {
+        return count;
+    }
 }
