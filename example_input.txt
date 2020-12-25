@@ -1,4 +1,8 @@
 A | B | C | D | E | F => C
+D + T
+# C ^ B
+D
+T => Y
 
 =DTYUIO
 ?C

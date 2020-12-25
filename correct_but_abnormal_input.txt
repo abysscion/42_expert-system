@@ -1,0 +1,49 @@
+?AAA
+=AAAAAAAAAAAAAAAAA#AAAAAAAAAAAAAAAAAA
+# this4s 123a comment
+# all t     3              he req123d4
+#####12341
+#
+## #412
+#3#4#12#3#4#1333
+
+?????????????????????
+
+
+
+?=?=?=?+?+?+?+?
+
+
+
+=#
+
+
+#
+	C   => E				#	 C implies E
+	A      + B																			 + C => D		# A and B and C implies D
+A    | B =>              C			# A 	r	 B implies C
+	A                                 + !B => F	#							 B implies F
+		C 					| ! G               => H			# C o	not G implies H
+	                    	V                                             ^ W => X				#W implies X
+		A + B 										=> Y + 									Z		# A and B 	mpl                   ies ##############Y and Z
+		
+		
+		
+		######################################################
+		#                                                    #
+		#   who the hell would make such a horrible thing?   #
+		#                                                    #
+		######################################################
+		
+		
+		
+				C | D => X | V		# C	 or D implies X or V
+			E +                      F => !V			# E and	 F implies not V
+				  A + B <=> C							# A and B	 and only if C
+	A + 			B			 <=> !C						# A and 	B if and o	nly if not C
+		                 
+				  =ABG				# Ini	ial facts : A, B and G are true. All others are false.
+								# I	no f	acts ar						e init	ally true, then a simple "=" followed
+									# b	y a	 newl		e 	s used
+				?									GVX		#			ries : Wh	at are G, V and X ?
+

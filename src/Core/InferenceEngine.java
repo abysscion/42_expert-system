@@ -19,7 +19,7 @@ public class InferenceEngine {
     private final HashSet<String> queries;
     private int count;
 
-    public InferenceEngine(boolean verboseFlag)
+    public InferenceEngine()
     {
         atomicFacts = new HashMap<>();
         ruleTrees = new ArrayList<>();
@@ -67,7 +67,7 @@ public class InferenceEngine {
                     line = Parser.getRulePartFromLine(line);
                     if (line.length() == 0)
                         continue;
-                    if (Parser.isRuleValid(line)) {
+                    if (Parser.isRuleValid(line, Parser.GetXFlag())) {
                         ASTNode temp = buildTreeFromRule(line);
                         ruleTrees.add(temp);
                     }

@@ -4,12 +4,13 @@ import java.io.File;
 import java.util.regex.Pattern;
 
 public class Parser {
-    private boolean IFlag;
-    private boolean VFlag;
+    private static boolean IFlag; //interactive flag
+    private static boolean VFlag; //verbose(explanation printing) flag
+    private static boolean XFlag; //ignoring condition (=> or <=>) demand flag
 
-    public boolean GetIFlag() { return IFlag; }
-
-    public boolean GetVFlag() { return VFlag; }
+    public static boolean GetIFlag() { return IFlag; }
+    public static boolean GetVFlag() { return VFlag; }
+    public static boolean GetXFlag() { return XFlag; }
 
     public static String getRulePartFromLine(String line) {
         if (line == null)
@@ -22,12 +23,12 @@ public class Parser {
         return tmpLine;
     }
 
-    public static boolean isRuleValid(String line) {
+    public static boolean isRuleValid(String line, boolean ignoreConditionDemand) {
         if (line == null)
             throw new NullPointerException();
         if (line.length() == 0)
             return false;
-        if (!line.contains("=>"))
+        if (!(line.contains("=>") || line.contains("<=>")) && !ignoreConditionDemand)
             return false;
 
         var tokens = line.split("\\s+");
@@ -54,10 +55,16 @@ public class Parser {
         return true;
     }
 
-    public void parseArguments(String[] args) throws Exception {
+    public static void parseArguments(String[] args) throws Exception {
         for (int i = 0, argsLength = args.length; i < argsLength; i++) {
             var argument = args[i];
             switch (argument) {
+                case "-x":
+                    if (!XFlag)
+                        XFlag = true;
+                    else
+                        throw new Exception("-x flag is already set!");
+                    break;
                 case "-v":
                     if (!VFlag)
                         VFlag = true;
