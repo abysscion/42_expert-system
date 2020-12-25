@@ -1,9 +1,11 @@
 package Core;
 
+import java.util.ArrayList;
+
 public class BooleanFunctionFabric {
-    public boolean[] selectOperation(String op, boolean[] left, boolean[] right) {
+    public ArrayList<Boolean> selectOperation(String op, ArrayList<Boolean> left, ArrayList<Boolean> right) {
         BooleanFunction function = new BooleanFunction();
-        boolean[] result;
+        ArrayList<Boolean> result;
         switch (op) {
             case "|":
                 result = function.lor(left, right);

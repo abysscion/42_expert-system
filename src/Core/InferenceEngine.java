@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class InferenceEngine {
     private final HashMap<String, Fact> knownFacts;
-    private final HashMap<String, boolean[]> atomicFacts;
+    private final HashMap<String, ArrayList<Boolean>> atomicFacts;
     private final ArrayList<Fact> atoms;
     private final ArrayList<ASTNode> ruleTrees;
     private final HashSet<String> queries;
@@ -106,7 +106,7 @@ public class InferenceEngine {
         }
     }
 
-    private boolean[] getAtomicDigitAsBooleans(Fact atomicFact) throws Exception {
+    private ArrayList<Boolean> getAtomicDigitAsBooleans(Fact atomicFact) throws Exception {
         if (atoms.size() == 0)
             throw new Exception("tried to get atomic digit from empty atoms list");
 
@@ -115,13 +115,13 @@ public class InferenceEngine {
         var zeroAndOneCount = (int)Math.pow(2, N - place - 1);
         var seriesRepeating = (int)Math.pow(2, place);
 
-        boolean[] result = new boolean[seriesRepeating * zeroAndOneCount * 2];
+        ArrayList<Boolean> result = new ArrayList<>(Collections.nCopies(seriesRepeating * zeroAndOneCount * 2, false));
 
         for (var i = 0; i < seriesRepeating; i++) {
             for (var j = 0; j < zeroAndOneCount; j++)
-                result[j + (zeroAndOneCount * i * 2)] = true;
+                result.set(j + (zeroAndOneCount * i * 2), true);
         }
-        count = result.length;
+        count = result.size();
         atomicFacts.put(atomicFact.toString(), result);
         return result;
     }
@@ -174,7 +174,7 @@ public class InferenceEngine {
         return knownFacts;
     }
 
-    public HashMap<String, boolean[]> getAtomicFacts() {
+    public HashMap<String, ArrayList<Boolean>> getAtomicFacts() {
         return atomicFacts;
     }
 

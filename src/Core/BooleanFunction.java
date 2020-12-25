@@ -1,58 +1,61 @@
 package Core;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class BooleanFunction {
-    public boolean[] lnot(boolean[] left, boolean[] right){
-        boolean[] result = new boolean[left != null ? left.length : right.length];
-
+    public static ArrayList<Boolean> lnot(ArrayList<Boolean> left, ArrayList<Boolean> right){
+        ArrayList<Boolean> result = new ArrayList<>();
         if (left != null){
-            for (int i = 0; i < left.length; i++)
-                result[i] = !left[i];
+            result = new ArrayList<>(Collections.nCopies(left.size(), false));
+            for (int i = 0; i < left.size(); i++)
+                result.set(i, !left.get(i));
             return result;
         }
         if (right != null){
-            for (int i = 0; i < right.length; i++)
-                result[i] = !right[i];
+            result = new ArrayList<>(Collections.nCopies(right.size(), false));
+            for (int i = 0; i < right.size(); i++)
+                result.set(i, !right.get(i));
         }
         return result;
     }
 
-    public boolean[] land(boolean[] left, boolean[] right){
-        boolean[] result = new boolean[left.length];
-        for (int i = 0; i < left.length; i++){
-            result[i] = left[i] | right[i];
+    public static ArrayList<Boolean> land(ArrayList<Boolean> left, ArrayList<Boolean> right){
+        ArrayList<Boolean> result = new ArrayList<>(Collections.nCopies(left.size(), false));
+        for (int i = 0; i < left.size(); i++){
+            result.set(i, left.get(i) | right.get(i));
         }
         return result;
     }
-    public boolean[] lxor(boolean[] left, boolean[] right){
-        boolean[] result = new boolean[left.length];
-        for (int i = 0; i < left.length; i++) {
-            result[i] = (left[i] | !right[i]) & (!left[i] | right[i]);
-        }
-        return result;
-    }
-
-    public boolean[] lor(boolean[] left, boolean[] right) {
-        boolean[] result = new boolean[left.length];
-        for (int i = 0; i < left.length; i++) {
-            result[i] = left[i] & right[i];
-        }
-        return result;
-    }
-    public boolean[] limplies(boolean[] left, boolean[] right){
-        boolean[] result = new boolean[left.length];
-        for (int i = 0; i < left.length; i++) {
-            result[i] = !left[i] & right[i];
+    public static ArrayList<Boolean> lxor(ArrayList<Boolean> left, ArrayList<Boolean> right){
+        ArrayList<Boolean> result = new ArrayList<>(Collections.nCopies(left.size(), false));
+        for (int i = 0; i < left.size(); i++) {
+            result.set(i, (left.get(i) | !right.get(i)) & (!left.get(i) | right.get(i)));
         }
         return result;
     }
 
+    public static ArrayList<Boolean> lor(ArrayList<Boolean> left, ArrayList<Boolean> right) {
+        ArrayList<Boolean> result = new ArrayList<>(Collections.nCopies(left.size(), false));
+        for (int i = 0; i < left.size(); i++) {
+            result.set(i, left.get(i) & right.get(i));
+        }
+        return result;
+    }
+    public static ArrayList<Boolean> limplies(ArrayList<Boolean> left, ArrayList<Boolean> right){
+        ArrayList<Boolean> result =  new ArrayList<>(Collections.nCopies(left.size(), false));
+        for (int i = 0; i < left.size(); i++) {
+            result.set(i, !left.get(i) & right.get(i));
+        }
+        return result;
+    }
 
-    public boolean[] lidentity(boolean[] left, boolean[] right){
-        boolean[] result = new boolean[left.length];
-        for (int i = 0; i < left.length; i++) {
-            result[i] = (left[i] | right[i]) & (!left[i] | !right[i]);
+
+    public static ArrayList<Boolean> lidentity(ArrayList<Boolean> left, ArrayList<Boolean> right){
+        ArrayList<Boolean> result =  new ArrayList<>(Collections.nCopies(left.size(), false));
+        for (int i = 0; i < left.size(); i++) {
+            result.set(i, (left.get(i) | right.get(i)) & (!left.get(i) | !right.get(i)));
         }
         return result;
     }
