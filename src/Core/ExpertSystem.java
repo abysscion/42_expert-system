@@ -2,51 +2,51 @@ package Core;
 
 public class ExpertSystem {
     public static void main(String[] args) throws Exception {
-        var filePath = "C:\\Users\\Mi\\Desktop\\42_expert-system\\example_input.txt";
-        var engine = new InferenceEngine();
-        GlobalGraph globalGraph = new GlobalGraph();
-      //  Parser.parseArguments(args);
-        if (Parser.getIFlag())
-            engine.enterInteractiveMode();
-
-        else {
-            engine.evaluateFile(filePath);
-            if (Parser.getCFlag()){
-
-            }
-            //
-            globalGraph.buildGraph(engine.getCount(), engine.getRuleTrees(), engine.getAtomicFacts());
-            globalGraph.printAnswer(engine.getQueries());
-        }
-
-
-//        try {
-//            if (args.length == 0)
-//                printUsage();
-//            else {
-//                var filePath = args[args.length - 1];
-//                var engine = new InferenceEngine();
-//                var globalGraph = new GlobalGraph();
+//        var filePath = "C:\\Users\\Mi\\Desktop\\42_expert-system\\example_input.txt";
+//        var engine = new InferenceEngine();
+//        GlobalGraph globalGraph = new GlobalGraph();
+//      //  Parser.parseArguments(args);
+//        if (Parser.getIFlag())
+//            engine.enterInteractiveMode();
 //
-//                Parser.parseArguments(args);
-//                if (Parser.getIFlag())
-//                    engine.enterInteractiveMode();
-//                else
-//                    engine.evaluateFile(filePath);
+//        else {
+//            engine.evaluateFile(filePath);
+//            if (Parser.getCFlag()){
 //
-//                globalGraph.buildGraph(engine.getCount(), engine.getRuleTrees(), engine.getAtomicFacts());
-//                globalGraph.printAnswer(engine.getQueries());
 //            }
+//            //
+//            globalGraph.buildGraph(engine.getCount(), engine.getRuleTrees(), engine.getAtomicFacts());
+//            globalGraph.printAnswer(engine.getQueries());
 //        }
-//        catch (Exception e) {
-//            var msg = e.getMessage();
-//            if (msg != null)
-//                System.out.println("[Error] " + msg);
-//            else
-//
-//                System.out.println("[Error] " + e.toString());
-//            e.printStackTrace(); //TODO: remove
-//        }
+
+
+        try {
+            if (args.length == 0)
+                printUsage();
+            else {
+                var filePath = args[args.length - 1];
+                var engine = new InferenceEngine();
+                var globalGraph = new GlobalGraph();
+
+                Parser.parseArguments(args);
+                if (Parser.getIFlag())
+                    engine.enterInteractiveMode();
+                else
+                    engine.evaluateFile(filePath);
+
+                globalGraph.buildGraph(engine.getCount(), engine.getRuleTrees(), engine.getAtomicFacts());
+                globalGraph.printAnswer(engine.getQueries());
+            }
+        }
+        catch (Exception e) {
+            var msg = e.getMessage();
+            if (msg != null)
+                System.out.println("[Error] " + msg);
+            else
+
+                System.out.println("[Error] " + e.toString());
+            e.printStackTrace(); //TODO: remove
+        }
     }
 
     private static void printUsage() {

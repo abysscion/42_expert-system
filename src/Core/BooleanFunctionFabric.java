@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class BooleanFunctionFabric {
     public ArrayList<Boolean> selectOperation(String op, ArrayList<Boolean> left, ArrayList<Boolean> right) {
         BooleanFunction function = new BooleanFunction();
-        ArrayList<Boolean> result;
+        ArrayList<Boolean> result = null;
         switch (op) {
             case "|":
                 result = function.lor(left, right);
@@ -26,7 +26,7 @@ public class BooleanFunctionFabric {
                 result = function.lidentity(left, right);
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + op);
+                Utilities.HandleException(new IllegalStateException("Unexpected value: " + op));
         }
         return result;
     }

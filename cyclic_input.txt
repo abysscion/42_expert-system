@@ -3,5 +3,5 @@ C	 => B
 B 		=> A
 
 =    A   B   C
- ? LLLLLOLOLOL
+
  ? 	A	B  C

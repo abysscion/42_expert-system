@@ -64,7 +64,7 @@ public class InfixToPostfixParser {
                     operatorStack.removeLast();
             }
             else {
-                throw new IllegalStateException("Could not recognize a token: " + currentToken);
+                Utilities.HandleException(new IllegalStateException("Could not recognize a token: " + currentToken));
             }
 
             previousToken = currentToken;

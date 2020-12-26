@@ -49,13 +49,13 @@ public class InferenceEngine {
     private void parseFile(String fileName) throws Exception {
         try {
             if (!new File(fileName).exists())
-                throw new Exception("file [" + fileName + "] not found!");
+                Utilities.HandleException(new Exception("file [" + fileName + "] not found!"));
             var reader = new BufferedReader(new FileReader(fileName));
             var line = "";
 
             while ((line = reader.readLine()) != null) {
                 if (!Parser.isLineValid(line))
-                    throw new Exception("invalid line: \"" + line + "\"");
+                    Utilities.HandleException(new Exception("invalid line: \"" + line + "\""));
                 line = line.substring(0, line.contains("#") ? line.indexOf('#') : line.length());
                 line = line.strip();
                 if (line.startsWith("=")) {
@@ -77,13 +77,13 @@ public class InferenceEngine {
             atoms.addAll(knownFacts.values());
         }
         catch (IOException e) {
-            throw new Exception("unable to read file: " + fileName);
+            Utilities.HandleException(new Exception("unable to read file: " + fileName));
         }
     }
 
     private void parseQueries(String line) {
         if (line == null)
-            throw new NullPointerException();
+            Utilities.HandleException(new NullPointerException());
         if (line.length() > 1 && line.startsWith("?")) {
             line = line.replaceAll("\\s+", "").substring(1);
             if (Pattern.matches("[^A-Za-z]", line))
@@ -96,7 +96,7 @@ public class InferenceEngine {
 
     private void parseKnownFacts(String line) {
         if (line == null)
-            throw new NullPointerException();
+            Utilities.HandleException(new NullPointerException());
         if (line.length() > 1 && line.startsWith("=")) {
             line = line.replaceAll("\\s+", "").substring(1);
             if (!Pattern.matches("[A-Z]*", line)) { //TODO: throw exception for invalid known fact?
@@ -113,7 +113,7 @@ public class InferenceEngine {
 
     private ArrayList<Boolean> getAtomicDigitAsBooleans(Fact atomicFact) throws Exception {
         if (atoms.size() == 0)
-            throw new Exception("tried to get atomic digit from empty atoms list");
+            Utilities.HandleException(new Exception("tried to get atomic digit from empty atoms list"));
 
         var N = atoms.size();
         var place = atoms.indexOf(atomicFact);
