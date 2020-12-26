@@ -42,7 +42,6 @@ public class InferenceEngine {
         }
     }
 
-
     private void evaluateLine() {
 
     }
@@ -59,15 +58,17 @@ public class InferenceEngine {
                     throw new Exception("invalid line: \"" + line + "\"");
                 line = line.substring(0, line.contains("#") ? line.indexOf('#') : line.length());
                 line = line.strip();
-                if (line.startsWith("="))
+                if (line.startsWith("=")) {
                     parseKnownFacts(line);
+
+                }
                 else if (line.startsWith("?"))
                     parseQueries(line);
                 else {
                     line = Parser.getRulePartFromLine(line);
                     if (line.length() == 0)
                         continue;
-                    if (Parser.isRuleValid(line, Parser.GetXFlag())) {
+                    if (Parser.isRuleValid(line, Parser.getXFlag())) {
                         ASTNode temp = buildTreeFromRule(line);
                         ruleTrees.add(temp);
                     }
@@ -96,10 +97,13 @@ public class InferenceEngine {
         if (line == null)
             throw new NullPointerException();
         if (line.length() > 1 && line.startsWith("=")) {
-            if (!Pattern.matches("^[A-Z]$", line)) //TODO: throw exception for invalid known fact?
+            line = line.replace("=", "");
+            if (!Pattern.matches("^[A-Z]*$", line)) { //TODO: throw exception for invalid known fact?
                 return;
-            var arr = line.toCharArray();
-            for (var i = 1; i < line.length(); i++) {
+            }
+            char[] arr = line.toCharArray();
+            for (var i = 0; i < line.length(); i++) {
+                ruleTrees.add(buildTreeFromRule(String.valueOf(arr[i])));
                 var name = arr[i] + "";
                 knownFacts.put(name, new Fact(name));
             }
@@ -170,20 +174,16 @@ public class InferenceEngine {
         return stack.pop();
     }
 
-    public HashMap<String, Fact> getKnownFacts() {
-        return knownFacts;
-    }
-
     public HashMap<String, ArrayList<Boolean>> getAtomicFacts() {
         return atomicFacts;
     }
 
-    public ArrayList<Fact> getAtoms() {
-        return atoms;
-    }
-
     public ArrayList<ASTNode> getRuleTrees() {
         return ruleTrees;
+    }
+
+    public HashSet<String> getQueries() {
+        return queries;
     }
 
     public int getCount() {

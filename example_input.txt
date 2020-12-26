@@ -1,8 +1,5 @@
-A | B | C | D | E | F => C
-D + T
-# C ^ B
-D
-T => Y
+C | E => C
 
-=DTYUIO
-?C
+
+=C
+?CKE

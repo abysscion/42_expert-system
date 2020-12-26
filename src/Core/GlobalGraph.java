@@ -8,6 +8,8 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class GlobalGraph {
+    private Map<String, String> answers = new HashMap<>();
+
     ArrayList<Boolean> execute(ASTNode tree, Map<String, ArrayList<Boolean>> atomicFacts) {
         if (tree == null || tree.getValue() == null || tree.getValue().equals("")) {
             return null;
@@ -30,6 +32,7 @@ public class GlobalGraph {
     }
 
     void buildGraph(int count, ArrayList<ASTNode> ruleTrees, Map<String, ArrayList<Boolean>> atomicFacts) {
+        System.out.println(ruleTrees);
         ArrayList<Boolean> globalState = new ArrayList<>(Collections.nCopies(count, false));
         for (ASTNode rule : ruleTrees) {
             globalAnd(globalState, execute(rule, atomicFacts));
@@ -38,8 +41,19 @@ public class GlobalGraph {
             System.out.println("System has a contradiction!!!!!!!!!");
             System.exit(0);
         }
-        for (String fact : atomicFacts.keySet()){
-            System.out.println(fact + " == " + formAnswer(globalState, atomicFacts, fact));
+        for (String fact : atomicFacts.keySet()){ // добавить обработку в зависимости от флага чеклиста.  если по классической логике оставить шо нужно и все,
+            // а если нет то....
+            answers.put(fact, formAnswer(globalState, atomicFacts, fact));
+        }
+    }
+
+    public void printAnswer(HashSet<String> queries){
+        for (String query : queries){
+            if (answers.containsKey(query)){
+                System.out.println(query + " = " + answers.get(query));
+            }
+            else
+                System.out.println(query + " = FALSE BY DEFAULT");
         }
     }
 
@@ -57,9 +71,10 @@ public class GlobalGraph {
         else
             return "INDETERMINATELY";
     }
+
     boolean doesItFollow(ArrayList<Boolean>assumption, ArrayList<Boolean>consequence){ //Check return assumption & consequence == consequence
         for (int i = 0; i < assumption.size(); i++) {
-           if (assumption.get(i) & consequence.get(i) != consequence.get(i))
+           if ((assumption.get(i) & consequence.get(i)) != consequence.get(i))
                return false;
         }
         return true;

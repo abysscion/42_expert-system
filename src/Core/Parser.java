@@ -7,10 +7,12 @@ public class Parser {
     private static boolean IFlag; //interactive flag
     private static boolean VFlag; //verbose(explanation printing) flag
     private static boolean XFlag; //ignoring condition (=> or <=>) demand flag
+    private static boolean CFlag; //if someone wants to make sure that the result matches checklist
 
-    public static boolean GetIFlag() { return IFlag; }
-    public static boolean GetVFlag() { return VFlag; }
-    public static boolean GetXFlag() { return XFlag; }
+    public static boolean getIFlag() { return IFlag; }
+    public static boolean getVFlag() { return VFlag; }
+    public static boolean getCFlag() { return CFlag; }
+    public static boolean getXFlag() { return XFlag; }
 
     public static String getRulePartFromLine(String line) {
         if (line == null)
@@ -76,6 +78,12 @@ public class Parser {
                         IFlag = true;
                     else
                         throw new Exception("-i flag is already set!");
+                    break;
+                case "-c":
+                    if (!CFlag)
+                        CFlag = true;
+                    else
+                        throw new Exception("-c flag is already set!");
                     break;
                 default:
                     if (i != argsLength - 1)
