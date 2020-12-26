@@ -4,10 +4,7 @@ import AST.*;
 import AST.Nodes.Not;
 import AST.Nodes.Fact;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -28,25 +25,30 @@ public class InferenceEngine {
         atoms = new ArrayList<>();
     }
 
-    public void enterInteractiveMode() {
+    public void enterInteractiveMode(GlobalGraph graph) throws IOException {
+        var reader = new BufferedReader(new InputStreamReader(System.in));
 
-    }
-
-    public void evaluateFile(String filePath) throws Exception {
-        parseFile(filePath);
-        for (var atom:atoms) {
-            System.out.print(atom.toString() + ": ");
-            for (var bit:getAtomicDigitAsBooleans(atom))
-                System.out.print(bit ? '1' : '0');
-            System.out.println();
+        while (true) {
+            System.out.println("\n*INTERACTIVE MODE*\n");
+            System.out.println("Rules:");
+            for (int i = 0, ruleTreesSize = ruleTrees.size(); i < ruleTreesSize; i++)
+                System.out.printf("\t%d) %s\n", i + 1, ruleTrees.get(i));
+            System.out.print("\nEnter query: ");
+            var input = reader.readLine();
+            if (input.equals("exit") || input.equals("quit"))
+                break;
+            input = input.replaceAll("\s+", "");
+            if (input.matches("[^A-Z]"))
+                System.out.println("Wrong query format! Example: ABC");
+            if (input.length() > 1) {
+                for (char fact : input.toCharArray()) {
+                    graph.printAnswerForExactFact("" + fact);
+                }
+            }
         }
     }
 
-    private void evaluateLine() {
-
-    }
-
-    private void parseFile(String fileName) throws Exception {
+    public void parseFile(String fileName) throws Exception {
         try {
             if (!new File(fileName).exists())
                 Utilities.HandleException(new Exception("file [" + fileName + "] not found!"));
@@ -58,10 +60,8 @@ public class InferenceEngine {
                     Utilities.HandleException(new Exception("invalid line: \"" + line + "\""));
                 line = line.substring(0, line.contains("#") ? line.indexOf('#') : line.length());
                 line = line.strip();
-                if (line.startsWith("=")) {
+                if (line.startsWith("="))
                     parseKnownFacts(line);
-
-                }
                 else if (line.startsWith("?"))
                     parseQueries(line);
                 else {
@@ -75,6 +75,15 @@ public class InferenceEngine {
                 }
             }
             atoms.addAll(knownFacts.values());
+
+            if (Parser.getDFlag()) {
+                for (var atom : atoms) {
+                    System.out.print(atom.toString() + ": ");
+                    for (var bit : getAtomicDigitAsBooleans(atom))
+                        System.out.print(bit ? '1' : '0');
+                    System.out.println();
+                }
+            }
         }
         catch (IOException e) {
             Utilities.HandleException(new Exception("unable to read file: " + fileName));
@@ -89,7 +98,7 @@ public class InferenceEngine {
             if (Pattern.matches("[^A-Za-z]", line))
                 return;
             var arr = line.toCharArray();
-            for (var i = 1; i < line.length(); i++)
+            for (var i = 0; i < line.length(); i++)
                 queries.add(arr[i] + "");
         }
     }

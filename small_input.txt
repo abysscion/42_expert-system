@@ -3,10 +3,10 @@
 #=ABDE
 #?C
 
-
+A			=> B
 B + (A | D) => C
 
-=ABD
+=AD
 
 
 ?C

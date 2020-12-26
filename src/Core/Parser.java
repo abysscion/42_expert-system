@@ -65,6 +65,7 @@ public class Parser {
             switch (argument) {
                 case "-D": case "-d":
                     DFlag = true;
+                    System.out.println("*DEBUG MODE IS ACTIVE*");
                     break;
                 case "-x":
                     if (!XFlag)
