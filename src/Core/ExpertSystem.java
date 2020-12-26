@@ -18,31 +18,35 @@ public class ExpertSystem {
             globalGraph.buildGraph(engine.getCount(), engine.getRuleTrees(), engine.getAtomicFacts());
             globalGraph.printAnswer(engine.getQueries());
         }
-        /*
-        try {
-            if (args.length == 0)
-                printUsage();
-            else {
-                var filePath = args[args.length - 1];
-                var engine = new InferenceEngine();
 
-                Parser.parseArguments(args);
-                if (Parser.GetIFlag())
-                    engine.enterInteractiveMode();
-                else
-                    engine.evaluateFile(filePath);
-            }
-        }
-        catch (Exception e) {
-            var msg = e.getMessage();
-            if (msg != null)
-                System.out.println("[Error] " + msg);
-            else
 
-                System.out.println("[Error] " + e.toString());
-            e.printStackTrace(); //TODO: remove
-        }
-        */
+//        try {
+//            if (args.length == 0)
+//                printUsage();
+//            else {
+//                var filePath = args[args.length - 1];
+//                var engine = new InferenceEngine();
+//                var globalGraph = new GlobalGraph();
+//
+//                Parser.parseArguments(args);
+//                if (Parser.getIFlag())
+//                    engine.enterInteractiveMode();
+//                else
+//                    engine.evaluateFile(filePath);
+//
+//                globalGraph.buildGraph(engine.getCount(), engine.getRuleTrees(), engine.getAtomicFacts());
+//                globalGraph.printAnswer(engine.getQueries());
+//            }
+//        }
+//        catch (Exception e) {
+//            var msg = e.getMessage();
+//            if (msg != null)
+//                System.out.println("[Error] " + msg);
+//            else
+//
+//                System.out.println("[Error] " + e.toString());
+//            e.printStackTrace(); //TODO: remove
+//        }
     }
 
     private static void printUsage() {

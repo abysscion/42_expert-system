@@ -85,6 +85,7 @@ public class InferenceEngine {
         if (line == null)
             throw new NullPointerException();
         if (line.length() > 1 && line.startsWith("?")) {
+            line = line.replaceAll("\\s+", "").substring(1);
             if (Pattern.matches("[^A-Za-z]", line))
                 return;
             var arr = line.toCharArray();
@@ -97,8 +98,8 @@ public class InferenceEngine {
         if (line == null)
             throw new NullPointerException();
         if (line.length() > 1 && line.startsWith("=")) {
-            line = line.replace("=", "");
-            if (!Pattern.matches("^[A-Z]*$", line)) { //TODO: throw exception for invalid known fact?
+            line = line.replaceAll("\\s+", "").substring(1);
+            if (!Pattern.matches("[A-Z]*", line)) { //TODO: throw exception for invalid known fact?
                 return;
             }
             char[] arr = line.toCharArray();
