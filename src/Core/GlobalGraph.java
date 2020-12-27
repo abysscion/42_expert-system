@@ -58,15 +58,15 @@ public class GlobalGraph {
             left.removeAll(right);
             for (String f : left) {
                 if (answers.get(f).equals(indeterminatelyFact)) {
-                    ASTNode notNode = ASTNodeFabric.CreateNode("The logical system is contradictory, every possible fact follows from it!\n" +
-                            "But it became contradictory after following illogical directions of the subject!");
+                    ASTNode notNode = ASTNodeFabric.CreateNode("!");
                     notNode.setLeft(ASTNodeFabric.CreateNode(f));
                     globalAnd(globalState, execute(notNode, atomicFacts));
                 }
             }
 
             if (!checkContradiction(globalState)) {
-                System.out.println("!");
+                System.out.println("\"The logical system is contradictory, every possible fact follows from it!\\n\" +\n" +
+                        "                            \"But it became contradictory after following illogical directions of the subject!\"");
                 System.exit(0);
             }
             for (String fact : atomicFacts.keySet()) {

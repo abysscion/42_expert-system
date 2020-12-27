@@ -7,7 +7,7 @@ public class Parser {
     private static boolean IFlag; //interactive flag
     private static boolean VFlag; //verbose(explanation printing) flag
     private static boolean XFlag; //ignoring condition (=> or <=>) demand flag
-    private static boolean CFlag = true; //if someone wants to make sure that the result matches checklist
+    private static boolean CFlag; //if someone wants to make sure that the result matches checklist
     private static boolean DFlag; //debug purposes flag
 
     public static boolean getDFlag() { return DFlag; }
