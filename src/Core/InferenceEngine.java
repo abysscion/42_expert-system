@@ -40,11 +40,11 @@ public class InferenceEngine {
             input = input.replaceAll("\\s+", "");
             if (input.matches("[^A-Z]"))
                 System.out.println("Wrong query format! Example: ABC");
-            if (input.length() > 1) {
-                for (char fact : input.toCharArray()) {
-                    graph.printAnswerForExactFact("" + fact);
-                }
-            }
+//            if (input.length() > 1) {
+//                for (char fact : input.toCharArray()) {
+//                    graph.printAnswerForExactFact("" + fact);
+//                }
+//            }
         }
     }
 
@@ -159,10 +159,8 @@ public class InferenceEngine {
                 knownFacts.put(fact, new Fact(fact));
             }
         }
-
         var rpnTokensList = InfixToPostfixParser.shuntingYard(deq);
         var stack = new Stack<ASTNode>();
-
         for (var token : rpnTokensList) {
             if (ASTParser.isOperator(token)) {
                 ASTNode node = ASTNodeFabric.CreateNode(token);
