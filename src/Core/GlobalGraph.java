@@ -77,25 +77,19 @@ public class GlobalGraph {
     }
 
     public void printAnswer(HashSet<String> queries) {
-        for (String query : queries){
-            if (answers.containsKey(query)){
-                System.out.println(query + " = " + answers.get(query));
-            }
-            else
-                System.out.println(query + " = FALSE BY DEFAULT");
+        for (String query : queries) {
+            printAnswerForExactFact(query);
         }
-//        for (String query : queries) {
-//            printAnswerForExactFact(query);
-//        }
     }
 
-//    public void printAnswerForExactFact(String factName) {
-//        if (answers.containsKey(factName)) {
-//            var answer = answers.get(factName).equals(trueFact);
-//            System.out.printf("%s = %s%s\033[0m\n", factName, answer ? "\033[0;32m" : "\033[0;31m", answer);
-//        } else
-//            System.out.printf("%s = \033[0;31mFALSE BY DEFAULT\033[0m\n", factName);
-//    }
+    public void printAnswerForExactFact(String factName) {
+        if (answers.containsKey(factName)) {
+            var answer = answers.get(factName);
+            answer = answer.equals(trueFact) ? "TRUE" : answer;
+            System.out.printf("%s = %s%s\033[0m\n", factName, answer.equals(trueFact) ? "\033[0;32m" : "\033[0;31m", answer);
+        } else
+            System.out.printf("%s = \033[0;31mFALSE BY DEFAULT\033[0m\n", factName);
+    }
 
     public boolean checkContradiction(ArrayList<Boolean> globalState) {
         return globalState.contains(false);

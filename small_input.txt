@@ -1,12 +1,18 @@
+(D ^ E) => B
+D => !F
+
+=D
+? BEDGF
+
 
 #B + (A | D | E) => C
 #=ABDE
 #?C
 
-A			=> B
-B + (A | D) => C
-
-=AD
-
-
-?C
+#A			=> B
+#B + (A | D) => C
+#
+#=AD
+#
+#
+#?C

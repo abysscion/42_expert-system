@@ -40,11 +40,9 @@ public class InferenceEngine {
             input = input.replaceAll("\\s+", "");
             if (input.matches("[^A-Z]"))
                 System.out.println("Wrong query format! Example: ABC");
-//            if (input.length() > 1) {
-//                for (char fact : input.toCharArray()) {
-//                    graph.printAnswerForExactFact("" + fact);
-//                }
-//            }
+            for (char fact : input.toCharArray()) {
+                graph.printAnswerForExactFact("" + fact);
+            }
         }
     }
 
@@ -111,7 +109,7 @@ public class InferenceEngine {
             Utilities.HandleException(new NullPointerException());
         if (line.length() > 1 && line.startsWith("=")) {
             line = line.replaceAll("\\s+", "").substring(1);
-            if (!Pattern.matches("[A-Z]*", line)) { //TODO: throw exception for invalid known fact?
+            if (!Pattern.matches("[A-Z]*", line)) {
                 return;
             }
             char[] arr = line.toCharArray();
@@ -154,7 +152,7 @@ public class InferenceEngine {
         }
         Collections.addAll(deq, rule.split("\\s+"));
 
-        for (var fact:deq) { //TODO: throw exception for invalid known fact?
+        for (var fact:deq) {
             if (fact.matches("^[A-Z]$") && !knownFacts.containsKey(fact)) {
                 knownFacts.put(fact, new Fact(fact));
             }
