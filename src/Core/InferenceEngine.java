@@ -37,7 +37,7 @@ public class InferenceEngine {
             var input = reader.readLine();
             if (input.equals("exit") || input.equals("quit"))
                 break;
-            input = input.replaceAll("\s+", "");
+            input = input.replaceAll("\\s+", "");
             if (input.matches("[^A-Z]"))
                 System.out.println("Wrong query format! Example: ABC");
             if (input.length() > 1) {
@@ -76,13 +76,16 @@ public class InferenceEngine {
             }
             atoms.addAll(knownFacts.values());
 
-            if (Parser.getDFlag()) {
-                for (var atom : atoms) {
+            //some shit happened here but no one actually cares
+            for (var atom : atoms) {
+                if (Parser.getDFlag())
                     System.out.print(atom.toString() + ": ");
-                    for (var bit : getAtomicDigitAsBooleans(atom))
+                for (var bit : getAtomicDigitAsBooleans(atom)) {
+                    if (Parser.getDFlag())
                         System.out.print(bit ? '1' : '0');
-                    System.out.println();
                 }
+                if (Parser.getDFlag())
+                    System.out.println();
             }
         }
         catch (IOException e) {
