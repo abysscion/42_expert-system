@@ -33,7 +33,6 @@ public class ExpertSystem {
         System.out.println("options:\n" +
                 "\t-i\t - enter interactive mode.\n" +
                 "\t-c\t - if you want to make sure that the result matches checklist.\n" +
-                "\t-x\t - ignore condition demand in rules (=> or <=> will be not necessary).\n" +
-                "\t-v\t - print some explanations as solving is going on.");
+                "\t-x\t - ignore condition demand in rules (=> or <=> will be not necessary).\n");
     }
 }

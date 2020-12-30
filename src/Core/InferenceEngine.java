@@ -38,7 +38,7 @@ public class InferenceEngine {
             if (input.equals("exit") || input.equals("quit"))
                 break;
             input = input.replaceAll("\\s+", "").toUpperCase();
-            if (input.matches("[^A-Z]"))
+            if (!input.matches("[A-Z]+"))
                 System.out.println("Wrong query format! Example: ABC");
             else {
                 for (char fact : input.toCharArray())
@@ -97,7 +97,7 @@ public class InferenceEngine {
             Utilities.HandleException(new NullPointerException());
         if (line.length() > 1 && line.startsWith("?")) {
             line = line.replaceAll("\\s+", "").substring(1);
-            if (Pattern.matches("[^A-Za-z]", line))
+            if (!line.matches("[A-Z]+"))
                 return;
             var arr = line.toCharArray();
             for (var i = 0; i < line.length(); i++)
@@ -110,9 +110,8 @@ public class InferenceEngine {
             Utilities.HandleException(new NullPointerException());
         if (line.length() > 1 && line.startsWith("=")) {
             line = line.replaceAll("\\s+", "").substring(1);
-            if (!Pattern.matches("[A-Z]*", line)) {
+            if (!line.matches("[A-Z]+"))
                 return;
-            }
             char[] arr = line.toCharArray();
             for (var i = 0; i < line.length(); i++) {
                 ruleTrees.add(buildTreeFromRule(String.valueOf(arr[i])));
