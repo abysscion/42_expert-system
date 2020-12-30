@@ -80,11 +80,11 @@ public class InferenceEngine {
                 if (Parser.getDFlag())
                     System.out.print(atom.toString() + ": ");
                 for (var bit : getAtomicDigitAsBooleans(atom)) {
-                    if (Parser.getDFlag())
-                        System.out.print(bit ? '1' : '0');
+                    //if (Parser.getDFlag())
+                        //System.out.print(bit ? '1' : '0');
                 }
-                if (Parser.getDFlag())
-                    System.out.println();
+                //if (Parser.getDFlag())
+                    //System.out.println();
             }
         }
         catch (IOException e) {
@@ -105,7 +105,7 @@ public class InferenceEngine {
         }
     }
 
-    private void parseKnownFacts(String line) {
+    private void parseKnownFacts(String line) throws Exception {
         if (line == null)
             Utilities.HandleException(new NullPointerException());
         if (line.length() > 1 && line.startsWith("=")) {
@@ -118,6 +118,8 @@ public class InferenceEngine {
                 var name = arr[i] + "";
                 knownFacts.put(name, new Fact(name));
             }
+            if (knownFacts.size() >= 20)
+                Utilities.HandleException(new Exception("too many facts! 20+ facts could cause HUGE problems.\nIf you are brave enough use -d flag to ignore it :)"));
         }
     }
 

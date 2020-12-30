@@ -1,6 +1,0 @@
-#!/bin/bash
-if [ "$OSTYPE" == "msys" -o "$OSTYPE" == "cygwin" -o "$OSTYPE" == "darwin"* ]; then
-	java -classpath "src" Core/ExpertSystem "${@:1}"
-else
-	echo "Can't recognize OSTYPE. Try to run manually."
-fi
