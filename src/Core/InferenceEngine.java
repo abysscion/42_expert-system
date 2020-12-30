@@ -37,11 +37,12 @@ public class InferenceEngine {
             var input = reader.readLine();
             if (input.equals("exit") || input.equals("quit"))
                 break;
-            input = input.replaceAll("\\s+", "");
+            input = input.replaceAll("\\s+", "").toUpperCase();
             if (input.matches("[^A-Z]"))
                 System.out.println("Wrong query format! Example: ABC");
-            for (char fact : input.toCharArray()) {
-                graph.printAnswerForExactFact("" + fact);
+            else {
+                for (char fact : input.toCharArray())
+                    graph.printAnswerForExactFact("" + fact);
             }
         }
     }

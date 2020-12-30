@@ -18,7 +18,7 @@ public class Parser {
 
     public static String getRulePartFromLine(String line) {
         if (line == null)
-            Utilities.HandleException(new NullPointerException()); //TODO: RELEASE: replace for exception
+            throw new NullPointerException();
         if (line.length() == 0)
             return "";
         var tmpLine = line.replaceAll("^[ \t]+|[ \t]+$", "");

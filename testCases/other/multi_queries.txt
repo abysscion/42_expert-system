@@ -1,0 +1,9 @@
+A => B
+C => D
+
+=AD
+
+?A
+?AB
+?ABC
+?ABCD
